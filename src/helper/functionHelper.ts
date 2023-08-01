@@ -69,12 +69,14 @@ const summarizeCategories = (allNotes: Note[]) => {
         } else {
             if (currentValue.isArchieved) {
                 accumulator.push({
+                    id: currentValue.category,
                     category: currentValue.category,
                     archieved: 1,
                     active: 0
                 })
             } else {
                 accumulator.push({
+                    id: currentValue.category,
                     category: currentValue.category,
                     active: 1,
                     archieved: 0
