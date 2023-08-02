@@ -4,17 +4,18 @@ import { extractDates } from "../helper/functionHelper"
 
 type TableData = Note | StatsObject
 
-const Table: React.FC<{ headers: String[], data: TableData[], buttons: TableButtonType[] }> = ({ headers, data, buttons }) => {
+const Table: React.FC<{ headers: String[], data: TableData[], buttons: TableButtonType[], contentEventListener: (id: number|string) => React.MouseEventHandler<HTMLTableCellElement> }> = ({ headers, data, buttons,contentEventListener }) => {
     if(data.length === 0){
-        return (<>
-        </>)
+        return (<div className="chosenDiv">
+            There is no suitable data!
+        </div>)
     }
     return (
         <>
             <table id="notArchivedNotes" className="notesTable">
                 <tbody>
                     <TableHeaders headers={headers} buttons={buttons} ></TableHeaders>
-                    {data.map(x => <TableRow key={x.id} data={x} buttons={buttons} ></TableRow>)}
+                    {data.map(x => <TableRow key={x.id} data={x} buttons={buttons} contentEventListener={contentEventListener}></TableRow>)}
                 </tbody>
             </table>
         </>
@@ -40,14 +41,14 @@ function isNote(data: TableData): data is Note {
     return (data as Note).created !== undefined; // Replace 'created' with an appropriate property of Note
 }
 
-const TableRow: React.FC<{ data: TableData, buttons: TableButtonType[] }> = ({ data, buttons }) => {
+const TableRow: React.FC<{ data: TableData, buttons: TableButtonType[], contentEventListener: (id: number|string) => React.MouseEventHandler<HTMLTableCellElement> }> = ({ data, buttons, contentEventListener }) => {
     if (isNote(data)) {
         return (<tr>
             <td><div className="circled-icons"><span className="material-symbols-outlined">{getIcon(data.category)}</span></div></td>
             <td>{data.name}</td>
             <td>{data.created}</td>
             <td>{data.category}</td>
-            <td className="contentDiv">{data.content.length > 13 ? data.content.slice(0, 13) + '...' : data.content.slice(0, data.content.length)}</td>
+            <td className="contentDiv" onClick={contentEventListener(data.id)}>{data.content.length > 13 ? data.content.slice(0, 13) + '...' : data.content.slice(0, data.content.length)}</td>
             <td>{extractDates(data.content)}</td>
             {buttons.map((button, index) => <TableButton noteId={data.id}key={index} button={button}></TableButton>)}
         </tr>)
@@ -55,7 +56,7 @@ const TableRow: React.FC<{ data: TableData, buttons: TableButtonType[] }> = ({ d
         return (
         <tr>
             <td><div className="circled-icons"><span className="material-symbols-outlined">{getIcon(data.category)}</span></div></td>
-            <td className="contentDiv">{data.category}</td>
+            <td className="contentDiv"  onClick={contentEventListener(data.category)}>{data.category}</td>
             <td>{data.active || 0}</td>
             <td>{data.archieved || 0}</td>
             </tr>)

@@ -98,6 +98,8 @@ const noteReducer = (state: Note[] = initialState, action: ActionType) => {
     switch (action.type) {
         case 'NEW_NOTE':
             return [...state, action.payload]
+        case 'EDIT_NOTE':
+            return state.map(note => note.id===action.payload.id?action.payload:note)
         case 'TOGGLE_ARCHIVE': {
             const id = action.payload
             const noteToChange = state.find(n => n.id === id)
