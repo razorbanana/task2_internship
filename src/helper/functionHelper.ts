@@ -39,8 +39,6 @@ const generateId = (allNotes: Note[]) => {
     return 1 + allNotes.reduce((acc, currentValue) => currentValue.id > acc ? currentValue.id : acc, 1)
 }
 
-
-
 //отримати об'єкт для побудови статистики
 const summarizeCategories = (allNotes: Note[]) => {
     return allNotes.reduce((accumulator: StatsObject[], currentValue) => {

@@ -1,9 +1,10 @@
 import { MouseEventHandler } from "react"
 import { Note } from "../service/types"
 
-const Form:React.FC<{formData:Note, identifier:string, handleCloseForm: MouseEventHandler<HTMLInputElement>, handleChangeForm:React.ChangeEventHandler<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>, handleSubmitForm: MouseEventHandler<HTMLInputElement>}> = ({formData,identifier,handleCloseForm,handleChangeForm, handleSubmitForm}) => {
+//елемент форма
+const Form:React.FC<{formData:Note, visibility:boolean,  handleCloseForm: MouseEventHandler<HTMLInputElement>, handleChangeForm:React.ChangeEventHandler<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>, handleSubmitForm: MouseEventHandler<HTMLInputElement>}> = ({formData, visibility, handleCloseForm,handleChangeForm, handleSubmitForm}) => {
     return (
-        <div className="formDiv" id={identifier}>
+        <div className="formDiv" style={{ display: visibility ? 'flex' : 'none' }}>
         <form className="noteForm">
             <label htmlFor="name">Name:</label>
             <input type="text" id="name" name="name" value={formData.name} onChange={handleChangeForm} required/><br /><br />

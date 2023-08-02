@@ -1,10 +1,9 @@
-import { Note, StatsObject, TableButtonType } from "../service/types"
+import { Note, TableButtonType, TableData } from "../service/types"
 import getIcon from "../helper/icons"
 import { extractDates } from "../helper/functionHelper"
 
-type TableData = Note | StatsObject
-
-const Table: React.FC<{ headers: String[], data: TableData[], buttons: TableButtonType[], contentEventListener: (id: number|string) => React.MouseEventHandler<HTMLTableCellElement> }> = ({ headers, data, buttons,contentEventListener }) => {
+//таблиця
+const Table: React.FC<{ headers: String[], data: TableData[], buttons: TableButtonType[], contentEventHandler: (id: number|string) => React.MouseEventHandler<HTMLTableCellElement> }> = ({ headers, data, buttons,contentEventHandler }) => {
     if(data.length === 0){
         return (<div className="chosenDiv">
             There is no suitable data!
@@ -15,13 +14,14 @@ const Table: React.FC<{ headers: String[], data: TableData[], buttons: TableButt
             <table id="notArchivedNotes" className="notesTable">
                 <tbody>
                     <TableHeaders headers={headers} buttons={buttons} ></TableHeaders>
-                    {data.map(x => <TableRow key={x.id} data={x} buttons={buttons} contentEventListener={contentEventListener}></TableRow>)}
+                    {data.map(x => <TableRow key={x.id} data={x} buttons={buttons} contentEventHandler={contentEventHandler}></TableRow>)}
                 </tbody>
             </table>
         </>
     )
 }
 
+//заголовки таблиці
 const TableHeaders: React.FC<{ headers: String[], buttons: TableButtonType[] }> = ({ headers, buttons }) => {
     return (
         <tr>
@@ -31,24 +31,27 @@ const TableHeaders: React.FC<{ headers: String[], buttons: TableButtonType[] }> 
     )
 }
 
+//Заголовки таблиці
 const TableHeadersColumn: React.FC<{ header: String }> = ({ header }) => {
     return (
         <th>{header}</th>
     )
 }
 
+//перевірка типу
 function isNote(data: TableData): data is Note {
-    return (data as Note).created !== undefined; // Replace 'created' with an appropriate property of Note
+    return (data as Note).created !== undefined; 
 }
 
-const TableRow: React.FC<{ data: TableData, buttons: TableButtonType[], contentEventListener: (id: number|string) => React.MouseEventHandler<HTMLTableCellElement> }> = ({ data, buttons, contentEventListener }) => {
+//рядки з даними таблиці
+const TableRow: React.FC<{ data: TableData, buttons: TableButtonType[], contentEventHandler: (id: number|string) => React.MouseEventHandler<HTMLTableCellElement> }> = ({ data, buttons, contentEventHandler }) => {
     if (isNote(data)) {
         return (<tr>
             <td><div className="circled-icons"><span className="material-symbols-outlined">{getIcon(data.category)}</span></div></td>
             <td>{data.name}</td>
             <td>{data.created}</td>
             <td>{data.category}</td>
-            <td className="contentDiv" onClick={contentEventListener(data.id)}>{data.content.length > 13 ? data.content.slice(0, 13) + '...' : data.content.slice(0, data.content.length)}</td>
+            <td className="contentDiv" onClick={contentEventHandler(data.id)}>{data.content.length > 13 ? data.content.slice(0, 13) + '...' : data.content.slice(0, data.content.length)}</td>
             <td>{extractDates(data.content)}</td>
             {buttons.map((button, index) => <TableButton noteId={data.id}key={index} button={button}></TableButton>)}
         </tr>)
@@ -56,21 +59,23 @@ const TableRow: React.FC<{ data: TableData, buttons: TableButtonType[], contentE
         return (
         <tr>
             <td><div className="circled-icons"><span className="material-symbols-outlined">{getIcon(data.category)}</span></div></td>
-            <td className="contentDiv"  onClick={contentEventListener(data.category)}>{data.category}</td>
+            <td className="contentDiv"  onClick={contentEventHandler(data.category)}>{data.category}</td>
             <td>{data.active || 0}</td>
             <td>{data.archieved || 0}</td>
             </tr>)
     }
 }
 
+//іконки з заголовків таблиці
 const TableHeaderButton: React.FC<{ button: TableButtonType }> = ({ button }) => {
     return (
-        <th><span className="material-symbols-outlined buttonSpan">
+        <th><span className="material-symbols-outlined">
             {button.button}
         </span></th>
     )
 }
 
+//кнопки з рядків таблиці
 const TableButton: React.FC<{ button: TableButtonType, noteId: number }> = ({ button, noteId }) => {
     return (
         <td><span className="material-symbols-outlined buttonSpan" onClick={button.eventHandler(noteId)}>

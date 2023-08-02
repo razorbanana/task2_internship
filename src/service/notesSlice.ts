@@ -1,6 +1,7 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { Note, ActionType } from "./types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Note } from "./types";
 
+//початковий стан нотаток
 const initialState = [
     {
         id: 1,
@@ -92,15 +93,18 @@ const initialState = [
     }
 ];
 
-
-
-const noteReducer = (state: Note[] = initialState, action: ActionType) => {
-    switch (action.type) {
-        case 'NEW_NOTE':
+//створення слайсу
+const notesSlice = createSlice({
+    name: "notes",
+    initialState,
+    reducers: {
+        addNote: (state, action: PayloadAction<Note>) => {
             return [...state, action.payload]
-        case 'EDIT_NOTE':
-            return state.map(note => note.id===action.payload.id?action.payload:note)
-        case 'TOGGLE_ARCHIVE': {
+        },
+        editNote: (state, action: PayloadAction<Note>) => {
+            return state.map(note => note.id === action.payload.id ? action.payload : note)
+        },
+        toggleArchive: (state, action: PayloadAction<number>) => {
             const id = action.payload
             const noteToChange = state.find(n => n.id === id)
             if (noteToChange) {
@@ -114,16 +118,18 @@ const noteReducer = (state: Note[] = initialState, action: ActionType) => {
             } else {
                 return state
             }
-        }
-        case 'DELETE_NOTE':
+        },
+        deleteNote: (state, action: PayloadAction<number>) => {
             return state.filter(note => note.id !== action.payload)
-        default:
-            return state
-    }
-}
-
-const store = configureStore({
-    reducer: noteReducer,
+        }
+    },
 });
 
-export default store
+export const {
+    addNote,
+    editNote,
+    toggleArchive,
+    deleteNote
+} = notesSlice.actions;
+
+export default notesSlice.reducer;

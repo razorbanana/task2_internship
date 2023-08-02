@@ -1,12 +1,14 @@
+//тип для нотатки
 interface Note {
-    id: number, 
-    name: string, 
-    created: string, 
-    category: string, 
-    content: string, 
+    id: number,
+    name: string,
+    created: string,
+    category: string,
+    content: string,
     isArchieved: boolean
 }
 
+//тип для статистики по категоріях
 interface StatsObject {
     id: string,
     category: string,
@@ -14,15 +16,23 @@ interface StatsObject {
     archieved: number
 }
 
+//тип кнопки в таблиці
 interface TableButtonType {
     button: string,
     eventHandler: (id: number) => React.MouseEventHandler<HTMLSpanElement>
 }
 
-type ActionType =
-    | { type: 'NEW_NOTE'; payload: Note }
-    | { type: 'TOGGLE_ARCHIVE'; payload: number }
-    | { type: 'DELETE_NOTE'; payload: number }
-    | { type: 'EDIT_NOTE'; payload: Note };
+//тип стану інтерфейсу, потрібен для форм та виведення контенту нотаток
+interface UIState {
+    formData: Note;
+    chosenCategory: string;
+    activeNotesChosenContent: string;
+    archivedNotesChosenContent: string;
+    isCreateVisible: boolean;
+    isEditVisible: boolean;
+}
 
-export type {Note, ActionType, StatsObject,TableButtonType}
+//тип даних поданих для побудови таблиці
+type TableData = Note | StatsObject
+
+export type { Note, StatsObject, TableButtonType, UIState, TableData }
