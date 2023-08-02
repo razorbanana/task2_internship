@@ -1,8 +1,16 @@
-import './App.css';
+import ActiveTable from './pages/ActiveTable';
+import StatsTable from './pages/StatsTable';
+import EditForm from './pages/EditForm';
+import CreateForm from './pages/CreateForm';
 
-function App() {
+const App = () => {
   return (
-    <>Hello World!</>
+    <div id="bodyDiv">
+      <ActiveTable></ActiveTable>
+      <StatsTable></StatsTable>
+      <CreateForm></CreateForm>
+      <EditForm></EditForm>
+    </div>
   );
 }
 
