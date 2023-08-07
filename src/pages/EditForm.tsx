@@ -4,18 +4,37 @@ import { UIState } from "../service/types";
 import { setFormData, setIsEditVisible } from "../service/uiStateSlice";
 import { formatDate } from "../helper/functionHelper";
 import { editNote } from "../service/notesSlice";
+import { useEffect } from "react";
 
 //форма для редагування нотатки
 const EditForm:React.FC = () => {
     const dispatch = useDispatch();
 
-    //дані в формі та стан видимості форми
     const {
         formData,
         isEditVisible
     } = useSelector((state: { ui: UIState }) => state.ui);
 
-    //івент хендлер для нажимання по кнопці закриття форми
+    useEffect(() => {
+      const handleScroll = (event: Event) => {
+        if (isEditVisible) {
+          event.preventDefault();
+        }
+      };
+  
+      if (isEditVisible) {
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('scroll', handleScroll);
+      } else {
+        document.body.style.overflow = 'visible';
+        window.removeEventListener('scroll', handleScroll);
+      }
+  
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }, [isEditVisible]);
+
     const handleCloseEditForm: React.MouseEventHandler<HTMLInputElement> = (event) => {
         event.preventDefault()
         dispatch(setIsEditVisible(false))
@@ -31,7 +50,6 @@ const EditForm:React.FC = () => {
         ))
       }
     
-      //івент хендлер для зміни даних в формі 
       const handleChangeEditForm: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> = (event) => {
         const { name, value } = event.target;
         dispatch(setFormData({
@@ -40,7 +58,6 @@ const EditForm:React.FC = () => {
         }));
       };
     
-      //івент хендлер для нажимання по кнопці підтвердження форми
       const handleSubmitEditForm: React.MouseEventHandler<HTMLInputElement> = (event) => {
         event.preventDefault();
         const newNote = {

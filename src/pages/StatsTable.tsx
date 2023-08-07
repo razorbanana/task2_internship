@@ -9,17 +9,14 @@ import { Note, UIState } from "../service/types";
 const StatsTable: React.FC = () => {
     const dispatch = useDispatch();
 
-    //вибрана в таблиці статистики категорія та вміст вибраної серед архівованих нотатки 
     const {
         chosenCategory,
         archivedNotesChosenContent,
     } = useSelector((state: { ui: UIState }) => state.ui);
 
-    //всі нотатки та архівовані нотатки вибраної категорії
     const allNotes = useSelector((state: { notes: Note[] }) => state.notes)
     const chosenCategoryArchivedNotes = allNotes.filter(note => note.isArchieved && note.category === chosenCategory)
 
-    //івент хендлер для нажимання по кнопці розархівації нотатки
     const unarchiveEventHandler = (id: number): React.MouseEventHandler<HTMLSpanElement> => {
         return (event) => {
             dispatch(setArchivedNotesChosenContent('Click content cell of archived notes to read it!'))
@@ -27,14 +24,12 @@ const StatsTable: React.FC = () => {
         }
     }
 
-    //івент хендлер для нажимання по категорії статистики
     const statsContentHandler = (id: number | string): React.MouseEventHandler<HTMLTableCellElement> => (event) => {
         event.preventDefault()
         dispatch(setArchivedNotesChosenContent('Click content cell of archived notes to read it!'))
         dispatch(setChosenCategory(String(id)))
     }
 
-    //івент хендлер для нажимання по вмісту архівованої нотатки
     const archivedNotesContentEventHandler = (id: number | string): React.MouseEventHandler<HTMLTableCellElement> => (event) => {
         event.preventDefault()
         const chosenContent = chosenCategoryArchivedNotes.find(note => note.id === id)
@@ -46,9 +41,9 @@ const StatsTable: React.FC = () => {
     } else {
         return (<div>
             <Table headers={['', 'Category', 'Active', 'Archived']} data={summarizeCategories(allNotes)} contentEventHandler={statsContentHandler} buttons={[]}></Table>
-            <div className="chosenDiv">{chosenCategory === '' ? 'Click category to read archived notes' : `Chosen category is ${chosenCategory}`}</div>
+            <div className="m-5 text-2xl p-1">{chosenCategory === '' ? 'Click category to read archived notes' : `Chosen category is ${chosenCategory}`}</div>
             {chosenCategory === '' ? '' : <><Table headers={['', 'Name', 'Created', 'Category', 'Content', 'Dates']} data={chosenCategoryArchivedNotes} contentEventHandler={archivedNotesContentEventHandler} buttons={[{ button: 'unarchive', eventHandler: unarchiveEventHandler }]}></Table>
-                <div className="chosenDiv">{chosenCategoryArchivedNotes.length === 0 ? 'Choose another category' : archivedNotesChosenContent}</div></>}
+                <div className="m-5 text-2xl p-1">{chosenCategoryArchivedNotes.length === 0 ? 'Choose another category' : archivedNotesChosenContent}</div></>}
         </div>)
     }
 }

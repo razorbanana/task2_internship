@@ -4,21 +4,39 @@ import { Note, UIState } from "../service/types";
 import { setFormData, setIsCreateVisible } from "../service/uiStateSlice";
 import { formatDate, generateId } from "../helper/functionHelper";
 import { addNote } from "../service/notesSlice";
+import { useEffect } from "react";
 
 //форма для створення нотатки
 const CreateForm: React.FC = () => {
     const dispatch = useDispatch();
 
-    //дані в формі та стан видимості форми 
     const {
         formData,
         isCreateVisible,
     } = useSelector((state: { ui: UIState }) => state.ui);
 
-    //всі нотатки
     const allNotes = useSelector((state: { notes: Note[] }) => state.notes)
 
-    //івент хендлер для нажимання по кнопці закриття форми
+    useEffect(() => {
+        const handleScroll = (event: Event) => {
+          if (isCreateVisible) {
+            event.preventDefault();
+          }
+        };
+    
+        if (isCreateVisible) {
+          document.body.style.overflow = 'hidden';
+          window.addEventListener('scroll', handleScroll);
+        } else {
+          document.body.style.overflow = 'visible';
+          window.removeEventListener('scroll', handleScroll);
+        }
+    
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, [isCreateVisible]);
+
     const handleCloseCreateForm: React.MouseEventHandler<HTMLInputElement> = (event) => {
         event.preventDefault()
 
@@ -35,7 +53,6 @@ const CreateForm: React.FC = () => {
         dispatch(setIsCreateVisible(false))
     }
 
-    //івент хендлер для зміни даних в формі 
     const handleChangeCreateForm: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> = (event) => {
         const { name, value } = event.target;
         dispatch(setFormData({
@@ -44,7 +61,6 @@ const CreateForm: React.FC = () => {
         }));
     };
 
-    //івент хендлер для нажимання по кнопці підтвердження форми
     const handleSubmitCreateForm: React.MouseEventHandler<HTMLInputElement> = (event) => {
         event.preventDefault();
 

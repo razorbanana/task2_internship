@@ -5,11 +5,13 @@ import CreateForm from './pages/CreateForm';
 
 const App = () => {
   return (
-    <div id="bodyDiv">
-      <ActiveTable></ActiveTable>
-      <StatsTable></StatsTable>
-      <CreateForm></CreateForm>
-      <EditForm></EditForm>
+    <div className="flex justify-center items-center ">
+      <div className="font-roboto" id="bodyDiv">
+        <ActiveTable></ActiveTable>
+        <StatsTable></StatsTable>
+        <CreateForm></CreateForm>
+        <EditForm></EditForm>
+      </div>
     </div>
   );
 }
