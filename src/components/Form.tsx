@@ -4,7 +4,7 @@ import { Note } from "../service/types"
 //елемент форма
 const Form: React.FC<{ formData: Note, visibility: boolean, handleCloseForm: MouseEventHandler<HTMLInputElement>, handleChangeForm: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, handleSubmitForm: MouseEventHandler<HTMLInputElement> }> = ({ formData, visibility, handleCloseForm, handleChangeForm, handleSubmitForm }) => {
     return (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 hidden flex justify-center items-center transition-opacity duration-300" style={{ display: visibility ? 'flex' : 'none' }}>
+        <div className="top-0 left-0 w-full h-full bg-black bg-opacity-50 hidden flex justify-center items-center transition-opacity duration-300" style={{ display: visibility ? 'flex' : 'none' }}>
             <form className="bg-gray-200 p-4 rounded-lg">
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">

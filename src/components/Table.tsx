@@ -3,7 +3,7 @@ import getIcon from "../helper/icons"
 import { extractDates } from "../helper/functionHelper"
 
 //таблиця
-const Table: React.FC<{ headers: String[], data: TableData[], buttons: TableButtonType[], contentEventHandler: (id: number|string) => React.MouseEventHandler<HTMLTableCellElement> }> = ({ headers, data, buttons,contentEventHandler }) => {
+const Table: React.FC<{ headers: String[], data: TableData[], buttons: TableButtonType[], contentEventHandler: (id: number|string) => React.MouseEventHandler<HTMLTableCellElement> }> = ({ headers, data, buttons, contentEventHandler }) => {
     if(data.length === 0){
         return (<div className="m-5 text-2xl p-1">
             There is no suitable data!

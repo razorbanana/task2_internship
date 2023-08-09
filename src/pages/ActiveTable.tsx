@@ -51,11 +51,18 @@ const ActiveTable: React.FC = () => {
     }
   }
 
+  const activeTableButtons = [{ button: 'edit', eventHandler: openEditForm },
+  { button: 'archive', eventHandler: archiveEventHandler },
+  { button: 'delete', eventHandler: deleteEventHandler }]
+
   return (
     <div>
-      <Table headers={['', 'Name', 'Created', 'Category', 'Content', 'Dates']} data={activeNotes} contentEventHandler={activeNotesContentEventHandler} buttons={[{ button: 'edit', eventHandler: openEditForm }, { button: 'archive', eventHandler: archiveEventHandler }, { button: 'delete', eventHandler: deleteEventHandler }]}></Table>
+      <Table headers={['', 'Name', 'Created', 'Category', 'Content', 'Dates']}
+        data={activeNotes}
+        contentEventHandler={activeNotesContentEventHandler}
+        buttons={activeTableButtons}></Table>
       <div className="m-5 text-2xl p-1">{activeNotes.length === 0 ? 'Add new note or unarchive old' : activeNotesChosenContent}</div>
-      <button id="createButton"  className="mt-10 border cursor-pointer h-16 w-40 float-right text-lg font-semibold rounded-lg p-2 mb-5" onClick={openCreateForm}>Create note</button>
+      <button id="createButton" className="mt-10 border cursor-pointer h-16 w-40 float-right text-lg font-semibold rounded-lg p-2 mb-5" onClick={openCreateForm}>Create note</button>
     </div>
   )
 }
